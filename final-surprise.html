@@ -76,6 +76,38 @@
         .logo:hover {
             opacity: 1;
         }
+
+        /* Download Button Styles */
+        .download-container {
+            margin-top: 2rem;
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            color: black;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            background: #f8f9fa;
+        }
+
+        .download-btn i {
+            margin-right: 10px;
+        }
     </style>
 </head>
 
@@ -89,6 +121,12 @@
             <source src="2026.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
+
+        <div class="download-container">
+            <a href="2026.mp4" download="video_2026.mp4" class="download-btn">
+                Download
+            </a>
+        </div>
     </div>
 
     <p class="message"></p>
