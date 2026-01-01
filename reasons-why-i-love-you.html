@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reasons Why I Love You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Reasons Page Specific Styles */
+        .reasons-container {
+            max-width: 1200px;
+            padding: 2rem;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .header-quote {
+            font-size: 2rem;
+            color: #000;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.5);
+            font-family: 'Dancing Script', cursive;
+            font-weight: bold;
+        }
+
+        .reasons-title {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .reason-card {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .reason-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.25);
+        }
+
+        .reason-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .reason-text {
+            font-size: 1.8rem;
+            color: #000;
+            text-align: center;
+            min-height: 60px;
+            font-family: 'Dancing Script', cursive;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+            margin-top: 1rem;
+        }
+
+        /* Decorative Corner Hearts */
+        .corner-heart {
+            position: fixed;
+            font-size: 4rem;
+            z-index: 100;
+            animation: heartPulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.5));
+        }
+
+        .corner-heart.top-left {
+            top: 20px;
+            left: 20px;
+            animation-delay: 0s;
+        }
+
+        .corner-heart.top-right {
+            top: 20px;
+            right: 20px;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes heartPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .reasons-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reasons-title {
+                font-size: 2rem;
+            }
+
+            .corner-heart {
+                font-size: 2.5rem;
+            }
+
+            .corner-heart.top-left,
+            .corner-heart.top-right {
+                top: 10px;
+            }
+
+            .corner-heart.top-left {
+                left: 10px;
+            }
+
+            .corner-heart.top-right {
+                right: 10px;
+            }
+        }
+
+
+
+        /* Next Button Styles */
+        .next-button-container {
+            text-align: center;
+            margin-top: 3rem;
+            padding-bottom: 2rem;
+        }
+
+        .next-btn {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            background: white;
+            /* White Background */
+            color: black;
+            /* Black Text */
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-weight: bold;
+            text-shadow: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            background: #f8f9fa;
+            /* Slight grey on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Logo -->
+    <img src="logo.png" alt="Logo" class="logo">
+
+    <!-- Decorative Corner Hearts -->
+    <div class="corner-heart top-left"></div>
+    <div class="corner-heart top-right"></div>
+
+    <div class="container reasons-container">
+        <p class="header-quote">“I could give you a thousand reasons… but even that wouldn’t be enough”</p>
+        <h1 class="reasons-title">❤️Reasons Why I Love You❤️</h1>
+
+        <div class="reasons-grid">
+            <!-- Reason 1 -->
+            <div class="reason-card">
+                <img src="1.jpg" alt="Reason 1" class="reason-image">
+                <p class="reason-text">I love how your smile instantly makes my day better</p>
+            </div>
+
+            <!-- Reason 2 -->
+            <div class="reason-card">
+                <img src="2.jpg" alt="Reason 2" class="reason-image">
+                <p class="reason-text">I love how you make me feel like I’m home</p>
+            </div>
+
+            <!-- Reason 3 (using image 4.jpg) -->
+            <div class="reason-card">
+                <img src="4.jpg" alt="Reason 3" class="reason-image">
+                <p class="reason-text">I love how deeply you love me, and how genuinely you care about me</p>
+            </div>
+        </div>
+
+        <!-- Next Button -->
+        <div class="next-button-container">
+            <button class="next-btn" onclick="window.location.href='scratch-me.html'">Next ➜</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('click', (e) => {
+            const isButton = e.target.tagName === 'BUTTON' ||
+                (e.target.tagName === 'INPUT' && e.target.type === 'button');
+            if (isButton) {
+                new Audio('click.WAV').play().catch(err => console.log('Sound play deferred'));
+            }
+        });
+    </script>
+</body>
+
+</html>

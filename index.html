@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do you love me?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Splash Screen (To ensure user interaction for audio) -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <h1>Welcome to 2026</h1>
+            <p>Click anywhere</p>
+        </div>
+    </div>
+
+    <!-- Fireworks Canvas (Full Screen) -->
+    <canvas id="fireworks-canvas"></canvas>
+
+    <!-- Logo -->
+    <img src="logo.png" alt="Logo" class="logo">
+
+    <!-- Background Music -->
+    <audio id="bg-music" src="fireworks.MP3" loop autoplay preload="auto"></audio>
+
+    <!-- Welcome Screen -->
+    <div class="container" id="welcome-container">
+        <h1 class="welcome-title">Happy New Year<br>Habibi</h1>
+        <div class="buttons">
+            <input type="button" value="START" id="start-button" onclick="startExperience()">
+        </div>
+    </div>
+
+    <!-- Countdown Screen -->
+    <div class="countdown-container hidden" id="countdown-container">
+        <div class="countdown-timer" id="countdown-timer">10</div>
+        <img src="congrats.jpg" alt="Congratulations" class="countdown-image">
+    </div>
+
+    <div class="container hidden" id="main-container">
+        <img src="im.png" alt="Cute image" class="main-image">
+        <h1>First, Do You Love Me?</h1>
+        <div class="buttons">
+            <input id="yes-button" type="button" value="YES" onclick="clickYesButton()">
+            <input id="no-button" type="button" value="NO" onmouseover="hoverNoButton()">
+            <input id="hbeeeeeek-button" type="button" value="Hbeeeeeek" class="hidden"
+                onclick="clickHbeeeeeekButton()">
+        </div>
+    </div>
+
+    <div id="success-container" class="container hidden">
+        <div class="heart-animation">❤️</div>
+        <img src="imm.png" alt="Happy image" class="main-image">
+        <h1>8asban 3anak</h1>
+        <div class="buttons">
+            <input type="button" value="Next" onclick="goToNextPage()">
+        </div>
+    </div>
+
+    <div id="love-letter-container" class="love-letter-container hidden">
+        <div class="love-letter-wrapper">
+            <div class="love-letter-envelope close" id="loveLetterEnvelope">
+                <div class="love-letter-front love-letter-flap"></div>
+                <div class="love-letter-front love-letter-pocket"></div>
+                <div class="love-letter-paper">
+                    <!-- CUSTOMIZE YOUR MESSAGE HERE -->
+                    <div class="love-letter-text line1">To: Habibi</div>
+                    <div class="love-letter-text line2">Dear israa, u are my everyhing</div>
+                    <div class="love-letter-text line3">i am always Gratful that our paths crossed</div>
+                    <div class="love-letter-text line4">Hbeeeeek Barcha Barchatttt</div>
+                </div>
+                <div class="love-letter-hearts">
+                    <div class="love-letter-heart a1"></div>
+                    <div class="love-letter-heart a2"></div>
+                    <div class="love-letter-heart a3"></div>
+                </div>
+            </div>
+        </div>
+        <div class="love-letter-controls">
+            <div>
+                <button class="love-letter-btn" id="loveLetterOpen">Open</button>
+                <button class="love-letter-btn" id="loveLetterClose">Close</button>
+            </div>
+            <button class="love-letter-btn" id="loveLetterNext">Next</button>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+    <script src="fireworks-landing.js"></script>
+</body>
+
+</html>

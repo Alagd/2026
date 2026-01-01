@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Love Letter Component - Standalone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ============================================
+       LOVE LETTER COMPONENT - STANDALONE STYLES
+       Copy this entire <style> block to your website's CSS
+       ============================================ */
+    
+    /* Container for the love letter component */
+    .love-letter-container {
+      background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+      background-color: #f7e6f6;
+      background-image: radial-gradient(circle at center, #fce4ec 0%, #f8bbd0 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .love-letter-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .love-letter-envelope {
+      position: relative;
+      width: 420px;
+      height: 270px;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 100px;
+      background-color: #ff6863;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transform-style: preserve-3d;
+      transition: transform 0.4s ease-in-out;
+      cursor: pointer;
+    }
+
+    .love-letter-front {
+      position: absolute;
+      width: 0;
+      height: 0;
+      z-index: 3;
+    }
+
+    .love-letter-flap {
+      border-left: 210px solid transparent;
+      border-right: 210px solid transparent;
+      border-bottom: 123px solid transparent;
+      border-top: 147px solid #ff6863;
+      transform-origin: top;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    .love-letter-pocket {
+      border-left: 210px solid #ff8580;
+      border-right: 210px solid #ff8580;
+      border-bottom: 135px solid #ff9e99;
+      border-top: 135px solid transparent;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+
+    .love-letter-paper {
+      position: relative;
+      background-color: #fffdfc;
+      background-image: linear-gradient(#fffdfc 97%, #fcfae3 100%);
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+      height: 90%;
+      top: 5%;
+      border-radius: 6px;
+      box-shadow: 0 2px 26px rgba(0, 0, 0, 0.08);
+      font-family: "Dancing Script", cursive;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .love-letter-paper:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .love-letter-text {
+      width: 100%;
+      background-color: transparent;
+      color: #555;
+      text-align: center;
+      padding: 5px 0;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+    }
+
+    .love-letter-text.line1 {
+      font-size: 1.5rem;
+    }
+
+    .love-letter-text.line2,
+    .love-letter-text.line3,
+    .love-letter-text.line4 {
+      font-size: 1.1rem;
+    }
+
+    /* Open/Close states */
+    .love-letter-envelope.open .love-letter-flap {
+      transform: rotateX(180deg);
+      transition: transform 0.4s ease, z-index 0.6s;
+      z-index: 1;
+    }
+
+    .love-letter-envelope.close .love-letter-flap {
+      transform: rotateX(0deg);
+      transition: transform 0.4s 0.6s ease, z-index 1s;
+      z-index: 5;
+    }
+
+    .love-letter-envelope.close .love-letter-paper {
+      transform: translateY(0px);
+      transition: transform 0.4s ease, z-index 1s;
+      z-index: 1;
+    }
+
+    .love-letter-envelope.open .love-letter-paper {
+      transform: translateY(-150px);
+      transition: transform 0.4s 0.6s ease, z-index 0.6s;
+      z-index: 2;
+    }
+
+    /* Hearts animation */
+    .love-letter-hearts {
+      position: absolute;
+      top: 135px;
+      left: 0;
+      right: 0;
+      z-index: 2;
+    }
+
+    .love-letter-heart {
+      position: absolute;
+      bottom: 0;
+      right: 10%;
+      pointer-events: none;
+    }
+
+    .love-letter-heart:before,
+    .love-letter-heart:after {
+      position: absolute;
+      content: "";
+      left: 50px;
+      top: 0;
+      width: 50px;
+      height: 80px;
+      background: #e60073;
+      border-radius: 50px 50px 0 0;
+      transform: rotate(-45deg);
+      transform-origin: 0 100%;
+      pointer-events: none;
+    }
+
+    .love-letter-heart:after {
+      left: 0;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+    }
+
+    .love-letter-envelope.close .love-letter-heart {
+      opacity: 0;
+      animation: none;
+    }
+
+    .love-letter-heart.a1 {
+      left: 20%;
+      transform: scale(0.6);
+      opacity: 1;
+      animation: slideUp 4s linear 1, sideSway 2s ease-in-out 4 alternate;
+      animation-fill-mode: forwards;
+      animation-delay: 0.7s;
+    }
+
+    .love-letter-heart.a2 {
+      left: 55%;
+      transform: scale(1);
+      opacity: 1;
+      animation: slideUp 5s linear 1, sideSway 4s ease-in-out 2 alternate;
+      animation-fill-mode: forwards;
+      animation-delay: 0.7s;
+    }
+
+    .love-letter-heart.a3 {
+      left: 10%;
+      transform: scale(0.8);
+      opacity: 1;
+      animation: slideUp 7s linear 1, sideSway 2s ease-in-out 6 alternate;
+      animation-fill-mode: forwards;
+      animation-delay: 0.7s;
+    }
+
+    @keyframes slideUp {
+      0% {
+        top: 0;
+      }
+      100% {
+        top: -600px;
+      }
+    }
+
+    @keyframes sideSway {
+      0% {
+        margin-left: 0px;
+      }
+      100% {
+        margin-left: 50px;
+      }
+    }
+
+    /* Control buttons */
+    .love-letter-controls {
+      text-align: center;
+      margin-top: 50px;
+      z-index: 10;
+    }
+
+    .love-letter-btn {
+      font-weight: 800;
+      font-style: normal;
+      transition: all 0.3s ease;
+      -webkit-appearance: none;
+      appearance: none;
+      background-color: #fff;
+      border: none;
+      border-radius: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      color: #ff6863;
+      display: inline-block;
+      font-size: 16px;
+      text-transform: uppercase;
+      margin: 10px;
+      padding: 12px 24px;
+      line-height: 1em;
+      text-decoration: none;
+      min-width: 120px;
+      cursor: pointer;
+    }
+
+    .love-letter-btn:hover {
+      background-color: #ff6863;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(255, 104, 99, 0.2);
+    }
+
+    /* Responsive design */
+    @media (max-width: 480px) {
+      .love-letter-envelope {
+        width: 320px;
+        height: 205px;
+        margin-top: 50px;
+      }
+
+      .love-letter-flap {
+        border-left: 160px solid transparent;
+        border-right: 160px solid transparent;
+        border-bottom: 94px solid transparent;
+        border-top: 112px solid #ff6863;
+      }
+
+      .love-letter-pocket {
+        border-left: 160px solid #ff8580;
+        border-right: 160px solid #ff8580;
+        border-bottom: 103px solid #ff9e99;
+        border-top: 103px solid transparent;
+      }
+
+      .love-letter-text.line1 {
+        font-size: 1.2rem;
+      }
+
+      .love-letter-text.line2,
+      .love-letter-text.line3,
+      .love-letter-text.line4 {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ============================================
+       LOVE LETTER COMPONENT - HTML STRUCTURE
+       Copy this entire section to your website
+       ============================================ -->
+  
+  <div class="love-letter-container">
+    <div class="love-letter-wrapper">
+      <div class="love-letter-envelope close" id="loveLetterEnvelope">
+        <div class="love-letter-front love-letter-flap"></div>
+        <div class="love-letter-front love-letter-pocket"></div>
+        <div class="love-letter-paper">
+          <!-- CUSTOMIZE YOUR MESSAGE HERE -->
+          <div class="love-letter-text line1">To: Habibi</div>
+          <div class="love-letter-text line2">Dear israa,u are my everything</div>
+          <div class="love-letter-text line3">I am always grateful that our paths crossed</div>
+          <div class="love-letter-text line4">Hbeeeeek Barcha Barchatttt</div>
+        </div>
+        <div class="love-letter-hearts">
+          <div class="love-letter-heart a1"></div>
+          <div class="love-letter-heart a2"></div>
+          <div class="love-letter-heart a3"></div>
+        </div>
+      </div>
+    </div>
+    <div class="love-letter-controls">
+      <button class="love-letter-btn" id="loveLetterOpen">Open</button>
+      <button class="love-letter-btn" id="loveLetterClose">Close</button>
+    </div>
+  </div>
+
+  <!-- ============================================
+       LOVE LETTER COMPONENT - JAVASCRIPT
+       Include jQuery and this script in your website
+       ============================================ -->
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    // Love Letter Component - Vanilla JavaScript (No jQuery dependency)
+    // You can use this version if you don't want to include jQuery
+    
+    (function() {
+      'use strict';
+      
+      // Wait for DOM to be ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLoveLetter);
+      } else {
+        initLoveLetter();
+      }
+      
+      function initLoveLetter() {
+        var envelope = document.getElementById('loveLetterEnvelope');
+        var btnOpen = document.getElementById('loveLetterOpen');
+        var btnClose = document.getElementById('loveLetterClose');
+        
+        if (!envelope || !btnOpen || !btnClose) {
+          console.warn('Love Letter component elements not found');
+          return;
+        }
+        
+        // Click on envelope to open
+        envelope.addEventListener('click', function() {
+          openEnvelope();
+        });
+        
+        // Open button
+        btnOpen.addEventListener('click', function() {
+          openEnvelope();
+        });
+        
+        // Close button
+        btnClose.addEventListener('click', function() {
+          closeEnvelope();
+        });
+        
+        function openEnvelope() {
+          envelope.classList.add('open');
+          envelope.classList.remove('close');
+        }
+        
+        function closeEnvelope() {
+          envelope.classList.add('close');
+          envelope.classList.remove('open');
+        }
+      }
+    })();
+  </script>
+</body>
+</html>

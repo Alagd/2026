@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Letter</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fce4ec;
+            font-family: 'Outfit', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h2 style="
+        color: #fff;
+        font-size: 3.5rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 2rem;
+        text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.6);
+        animation: bounce 2s infinite;
+        letter-spacing: 2px;
+    ">Scratch Me!</h2>
+
+    <div class="scratch-container">
+        <div class="scratch-content">
+            <input type="text" id="secret-input" placeholder="Type secret code...">
+        </div>
+        <canvas id="scratch-canvas"></canvas>
+    </div>
+
+    <script src="scratch.js"></script>
+</body>
+
+</html>

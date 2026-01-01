@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratch to Reveal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            /* Ensure scrolling is allowed if needed, though this page might fit */
+            height: 100vh;
+            overflow: hidden;
+            /* Keep it fixed like the main page for the scratch interaction */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .scratch-container {
+            position: relative;
+            width: 500px;
+            /* Increased size */
+            height: 300px;
+            /* Increased size */
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            /* To clip the canvas to border radius */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .hidden-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            /* Below canvas */
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        }
+
+        .secret-input {
+            padding: 15px 20px;
+            font-size: 1.5rem;
+            border: 2px solid #ff6b6b;
+            border-radius: 30px;
+            outline: none;
+            text-align: center;
+            width: 70%;
+            font-family: 'Outfit', sans-serif;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .secret-input:focus {
+            box-shadow: 0 0 25px rgba(255, 107, 107, 0.6);
+            transform: scale(1.05);
+        }
+
+        .instruction-text {
+            margin-bottom: 20px;
+            font-family: 'Playfair Display', serif;
+            /* Better font */
+            font-size: 2rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        #scratch-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            /* On top */
+            cursor: url('coin.png'), auto;
+            /* Optional: custom cursor */
+            touch-action: none;
+            /* Prevent scrolling while scratching */
+        }
+
+        .page-title {
+            position: absolute;
+            top: 50px;
+            width: 100%;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            /* Better font */
+            font-size: 3.5rem;
+            /* Slightly larger */
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+            letter-spacing: 1px;
+        }
+
+        /* Decorative Background elements similar to styles.css */
+        .success-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            display: none;
+            /* Hidden by default */
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Class to apply when mostly scratched */
+        #scratch-canvas.scratched {
+            pointer-events: none;
+            opacity: 0.5;
+            transition: opacity 0.5s ease;
+        }
+
+        .enter-btn {
+            margin-top: 15px;
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .enter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .hint-btn {
+            display: none;
+            /* Hidden initially */
+            margin-bottom: 20px;
+            padding: 12px 30px;
+            /* Increased size */
+            font-size: 1.2rem;
+            /* Increased font size */
+            background: #ffd93d;
+            color: #333;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 217, 61, 0.4);
+            animation: bounce 1s infinite;
+        }
+
+        .error-message {
+            color: #ff4d4d;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            height: 20px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            /* Slightly more padding */
+            border-radius: 20px;
+            text-align: center;
+            max-width: 80%;
+            font-family: 'Playfair Display', serif;
+            /* Confirmed Better font */
+            font-size: 2.5rem;
+            /* Increased font size for better visibility */
+            font-weight: 700;
+            /* Bolder */
+            color: #d63384;
+            /* A nice pinkish color for the text */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 3px solid #ff6b6b;
+            /* Thicker border */
+            line-height: 1.4;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .game-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hint-btn-2 {
+            display: none;
+            margin-bottom: 20px;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            background: #2c3e50;
+            /* Darker for chess theme */
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.4);
+            animation: bounce 1.2s infinite alternate;
+        }
+
+        .hint-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Logo -->
+    <img src="logo.png" alt="Logo" class="logo">
+
+    <h1 class="page-title">✨Scratch Me✨</h1>
+
+    <div class="game-wrapper">
+        <!-- Hint Buttons Wrapper -->
+        <div class="hint-container">
+            <!-- Hint 1 (Appears after 7 tries) -->
+            <button id="hint-btn" class="hint-btn">Hint</button>
+            <!-- Hint 2 (Appears after 15 tries) -->
+            <button id="hint-btn-2" class="hint-btn-2">Hint 2</button>
+        </div>
+
+        <div class="scratch-container">
+            <!-- Beneath the scratch layer -->
+            <div class="hidden-content">
+                <label class="instruction-text" for="secret-code">Enter Secret Code:</label>
+                <input type="text" id="secret-code" class="secret-input" placeholder="One word..." autocomplete="off">
+                <p id="error-message" class="error-message">Wrong try again!</p>
+                <button id="enter-btn" class="enter-btn">Enter</button>
+            </div>
+
+            <!-- The Scratch Layer -->
+            <canvas id="scratch-canvas"></canvas>
+        </div>
+    </div>
+
+    <!-- Success Message Container -->
+    <div id="success-message" class="success-message">
+        <h2>Correct! 🎉</h2>
+        <p>You found the secret code!</p>
+    </div>
+
+    <!-- Hint Modal -->
+    <div id="hint-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span id="hint-text">the word is related to 9 november</span>
+            <br>
+            <button onclick="closeModal()"
+                style="margin-top: 20px; font-size: 1rem; padding: 5px 15px; border-radius: 10px; border: 1px solid #ccc; cursor: pointer; font-family: 'Outfit', sans-serif;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('scratch-canvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.querySelector('.scratch-container');
+        const input = document.getElementById('secret-code');
+        const enterBtn = document.getElementById('enter-btn');
+        const errorMsg = document.getElementById('error-message');
+        const hintBtn = document.getElementById('hint-btn');
+        const hintModal = document.getElementById('hint-modal');
+
+        let wrongAttempts = 0;
+
+        // Hint Logic
+        hintBtn.addEventListener('click', () => {
+            document.getElementById('hint-text').innerHTML = "the word is related to 9 november";
+            hintModal.style.display = 'flex';
+        });
+
+        // Second Hint Logic
+        const hintBtn2 = document.getElementById('hint-btn-2');
+        hintBtn2.addEventListener('click', () => {
+            document.getElementById('hint-text').innerHTML = "<span style='font-size: 1.5rem;'>chess</span>";
+            hintModal.style.display = 'flex';
+        });
+
+        window.closeModal = function () {
+            hintModal.style.display = 'none';
+        }
+
+        // Close modal if clicking outside
+        hintModal.addEventListener('click', (e) => {
+            if (e.target === hintModal) closeModal();
+        });
+
+        // Validation Logic (Manual Enter)
+        enterBtn.addEventListener('click', validateCode);
+
+        // Also allow 'Enter' key
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') validateCode();
+        });
+
+        function validateCode() {
+            const code = input.value.toLowerCase().trim();
+            const secret = "nxqd1".toLowerCase();
+
+            if (code === secret) {
+                // Success!
+                input.style.borderColor = "#4CAF50";
+                input.style.boxShadow = "0 0 20px rgba(76, 175, 80, 0.6)";
+                errorMsg.style.opacity = '0';
+
+                // Show success message
+                document.getElementById('success-message').style.display = 'block';
+
+                // Redirect to final page
+                setTimeout(() => window.location.href = 'final-surprise.html', 1500);
+            } else {
+                // Incorrect
+                wrongAttempts++;
+                input.style.borderColor = "#ff6b6b";
+                input.classList.add('shake'); // Optional shake animation could be added CSS
+
+                // Show Error Message
+                errorMsg.style.opacity = '1';
+                setTimeout(() => { errorMsg.style.opacity = '0'; }, 2000);
+
+                // Check for hint threshold
+                if (wrongAttempts >= 7) {
+                    hintBtn.style.display = 'block';
+                }
+                if (wrongAttempts >= 15) {
+                    hintBtn2.style.display = 'block';
+                    hintBtn2.classList.add('shake-hint'); // Make it shake or pulse
+                }
+            }
+        }
+
+        // Set canvas size to match container
+        function resizeCanvas() {
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+
+            // Fill with a "Scratch Me" design
+            ctx.fillStyle = '#C0C0C0'; // Silver color
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Add text
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '40px "Dancing Script"';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText("Scratch Here!", canvas.width / 2, canvas.height / 2);
+
+            // Add glitter
+            for (let i = 0; i < 150; i++) {
+                ctx.fillStyle = Math.random() > 0.5 ? '#ffffff' : '#999999';
+                ctx.beginPath();
+                ctx.arc(
+                    Math.random() * canvas.width,
+                    Math.random() * canvas.height,
+                    Math.random() * 2.5,
+                    0, Math.PI * 2
+                );
+                ctx.fill();
+            }
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Scratch Logic
+        let isDrawing = false;
+        let checkThrottle = 0;
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            // Handle both mouse and touch events
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function scratch(e) {
+            if (!isDrawing) return;
+            const pos = getMousePos(e);
+
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 25, 0, Math.PI * 2); // Increased brush size
+            ctx.fill();
+
+            // Check percentage scratched every 10 ticks
+            checkThrottle++;
+            if (checkThrottle > 10) {
+                checkThrottle = 0;
+                checkScratchPercentage();
+            }
+        }
+
+        function checkScratchPercentage() {
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const pixels = imageData.data;
+            let transparentPixels = 0;
+
+            // Iterate over pixels (RGBA) - check Alpha (every 4th value)
+            for (let i = 3; i < pixels.length; i += 4) {
+                if (pixels[i] < 128) { // If alpha < 50%
+                    transparentPixels++;
+                }
+            }
+
+            const totalPixels = pixels.length / 4;
+            const scratchedPercentage = (transparentPixels / totalPixels) * 100;
+
+            if (scratchedPercentage > 80) { // If > 30% is scratched
+                canvas.classList.add('scratched'); // Disable pointer events
+            }
+        }
+
+        // Even Listeners
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            scratch(e);
+        });
+        canvas.addEventListener('mousemove', scratch);
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseleave', () => isDrawing = false);
+
+        // Touch support
+        canvas.addEventListener('touchstart', (e) => {
+            isDrawing = true;
+            e.preventDefault(); // Prevent scrolling
+            scratch(e);
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            scratch(e);
+        });
+        canvas.addEventListener('touchend', () => isDrawing = false);
+
+        // Optional: Check percentage revealed to auto-clear?
+        // Highlighting the input is handled by CSS (:focus and default styling)
+
+        // Global Click Sound for this page
+        document.addEventListener('click', (e) => {
+            const isButton = e.target.tagName === 'BUTTON' ||
+                (e.target.tagName === 'INPUT' && e.target.type === 'button');
+            if (isButton) {
+                new Audio('click.WAV').play().catch(err => console.log('Sound play deferred'));
+            }
+        });
+    </script>
+</body>
+
+</html>
