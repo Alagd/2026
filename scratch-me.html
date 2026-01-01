@@ -290,7 +290,7 @@
     <!-- Logo -->
     <img src="logo.png" alt="Logo" class="logo">
 
-    <h1 class="page-title">✨Scratch Me✨</h1>
+    <h1 class="page-title">Scratch Me</h1>
 
     <div class="game-wrapper">
         <!-- Hint Buttons Wrapper -->
@@ -317,7 +317,7 @@
 
     <!-- Success Message Container -->
     <div id="success-message" class="success-message">
-        <h2>Correct! 🎉</h2>
+        <h2>Correct!</h2>
         <p>You found the secret code!</p>
     </div>
 
@@ -402,7 +402,7 @@
                 if (wrongAttempts >= 7) {
                     hintBtn.style.display = 'block';
                 }
-                if (wrongAttempts >= 15) {
+                if (wrongAttempts >= 14) {
                     hintBtn2.style.display = 'block';
                     hintBtn2.classList.add('shake-hint'); // Make it shake or pulse
                 }
@@ -489,7 +489,7 @@
             const totalPixels = pixels.length / 4;
             const scratchedPercentage = (transparentPixels / totalPixels) * 100;
 
-            if (scratchedPercentage > 80) { // If > 30% is scratched
+            if (scratchedPercentage > 75) { // If > 30% is scratched
                 canvas.classList.add('scratched'); // Disable pointer events
             }
         }
@@ -528,5 +528,6 @@
         });
     </script>
 </body>
+
 
 </html>
