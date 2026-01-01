@@ -12,6 +12,22 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         /* Reasons Page Specific Styles */
+        html,
+        body {
+            height: auto !important;
+            min-height: 100vh;
+            overflow-y: auto !important;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 80px;
+            /* Space for logo and top hearts */
+        }
+
         .reasons-container {
             max-width: 1200px;
             padding: 2rem;
