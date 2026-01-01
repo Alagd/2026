@@ -99,7 +99,7 @@ function clickYesButton() {
     let currentScale = 1 + (yesClickCount * 0.2);
     yesBtn.style.transform = `scale(${currentScale})`;
 
-    if (yesClickCount === 6) {
+    if (yesClickCount === 5) {
         // Hide Yes and No buttons
         document.getElementById('yes-button').classList.add('hidden');
         document.getElementById('no-button').classList.add('hidden');
